@@ -1,4 +1,4 @@
-package com.eqp3e1.Service;
+package com.eqp3e1.service;
 
 import com.eqp3e1.model.Estagio;
 import com.eqp3e1.repository.EstagioRepository;

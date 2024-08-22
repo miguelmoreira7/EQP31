@@ -1,4 +1,4 @@
-package com.eqp3e1.Service;
+package com.eqp3e1.service;
 
 import org.springframework.beans.factory.annotation.Autowired;
 
