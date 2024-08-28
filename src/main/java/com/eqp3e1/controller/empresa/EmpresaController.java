@@ -54,4 +54,10 @@ public class EmpresaController {
         }
         return "redirect:/empresa/todas";
     }
+
+    @GetMapping("/ficha/{id}")
+    public String fichaEmpresa(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("empresa", empresaService.buscarPorId(id).orElseThrow(() -> new RuntimeException("Empresa não encontrada")));
+        return "empresa/ficha";
+    }
 }

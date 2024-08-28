@@ -22,13 +22,18 @@
         </thead>
         <tbody>
         <tr th:each="oferta : ${ofertas}">
-            <td th:text="${oferta.getAtividadePrincipal()}"></td>
-            <td th:text="${oferta.getEmpresa().getNome()}"></td>
+            <td>
+                <a th:href="@{/oferta/ficha/{id}(id=${oferta.getId()})}" th:text="${oferta.getAtividadePrincipal()}"></a>
+            </td>
+            <td>
+                <a th:href="@{/empresa/ficha/{id}(id=${oferta.getEmpresa().getId()})}" th:text="${oferta.getEmpresa().getNome()}"></a>
+            </td>
             <td th:text="${oferta.getCargaHorariaSemanal()}"></td>
             <td>
                 <ul>
-                    <li th:each="candidato : ${oferta.getCandidaturas()}"
-                        th:text="${candidato.getId()} + ' - ' + ${candidato.getNome()}"></li>
+                    <li th:each="candidato : ${oferta.getCandidaturas()}">
+                        <a th:href="@{/aluno/ficha/{id}(id=${candidato.getId()})}" th:text="${candidato.getId()} + ' - ' + ${candidato.getNome()}"></a>
+                    </li>
                 </ul>
             </td>
             <td class="text-center align-middle">

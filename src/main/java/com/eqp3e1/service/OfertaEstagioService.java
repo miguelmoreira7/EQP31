@@ -26,7 +26,7 @@ public class OfertaEstagioService {
     }
 
     public List<OfertaEstagio> listarTodas() {
-        return (List<OfertaEstagio>) ofertaEstagioRepository.findAll();
+        return ofertaEstagioRepository.findAll();
     }
 
     public void deletar(Long id) {
@@ -58,4 +58,5 @@ public class OfertaEstagioService {
         oferta.addCandidato(aluno);
         ofertaEstagioRepository.save(oferta);
     }
+
 }

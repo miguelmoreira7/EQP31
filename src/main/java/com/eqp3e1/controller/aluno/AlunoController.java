@@ -1,6 +1,7 @@
 package com.eqp3e1.controller.aluno;
 
 import com.eqp3e1.model.Aluno;
+import com.eqp3e1.model.OfertaEstagio;
 import com.eqp3e1.service.AlunoService;
 import com.eqp3e1.service.HabilidadeService;
 import jakarta.validation.Valid;
@@ -11,6 +12,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Optional;
 
 @Controller
 @RequestMapping("/aluno")
@@ -42,9 +44,22 @@ public class AlunoController {
 
     @GetMapping("/todos")
     public String listarAlunos(Model model){
-        List<Aluno> alunos = alunoService.listarTodos();
+        List<Aluno> alunos = alunoService.listarAlunosComCandidaturas();
         model.addAttribute("alunos", alunos);
         return "aluno/listar";
     }
 
+    @GetMapping("/ficha/{id}")
+    public String fichaAluno(@PathVariable("id") Long id, Model model) {
+        Optional<Aluno> alunoOpt = alunoService.buscarPorId(id);
+        if (alunoOpt.isPresent()) {
+            Aluno aluno = alunoOpt.get();
+            List<OfertaEstagio> candidaturas = aluno.getCandidaturas();
+            model.addAttribute("aluno", alunoService.buscarPorId(id).orElseThrow(() -> new RuntimeException("Aluno não encontrado")));
+            model.addAttribute("candidaturas", candidaturas);
+            return "aluno/ficha";
+        } else {
+            throw new RuntimeException("Aluno não encontrado.");
+        }
+    }
 }

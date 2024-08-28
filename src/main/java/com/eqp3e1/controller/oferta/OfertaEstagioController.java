@@ -41,7 +41,7 @@ public class OfertaEstagioController {
         OfertaEstagio ofertaEstagio = new OfertaEstagio();
         model.addAttribute("ofertaEstagio", ofertaEstagio);
         model.addAttribute("empresaId", empresaId); // Passando o ID da empresa para o formulário
-        return "empresa/registrarOfertaEstagio";
+        return "ofertas/registrarOfertaEstagio";
     }
 
     @PostMapping("/salvar")
@@ -79,5 +79,11 @@ public class OfertaEstagioController {
             redirectAttributes.addFlashAttribute("errorMessage", e.getMessage());
         }
         return "redirect:/oferta/todas"; // Redireciona para a página de ofertas após a exclusão
+    }
+
+    @GetMapping("/ficha/{id}")
+    public String fichaOferta(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("oferta", ofertaEstagioService.buscarPorId(id).orElseThrow(() -> new RuntimeException("Oferta de Estágio não encontrada")));
+        return "ofertas/ficha";
     }
 }
