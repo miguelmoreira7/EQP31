@@ -9,7 +9,7 @@
 <div th:replace="~{partials/_navbar :: navbar}"></div>
 <div class="container mt-4">
     <h2>Registrar Nova Oferta de Estágio</h2>
-    <form th:action="@{/oferta-estagio/salvar}" th:object="${ofertaEstagio}" method="post">
+    <form th:action="@{/oferta/salvar}" th:object="${ofertaEstagio}" method="post">
         <!-- Campo oculto para armazenar o ID da empresa -->
         <input type="hidden" name="empresaId" th:value="${empresaId}" />
 

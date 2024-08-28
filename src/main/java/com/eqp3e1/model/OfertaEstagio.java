@@ -65,7 +65,9 @@ public class OfertaEstagio {
     private List<Aluno> candidatos = new ArrayList<>();
 
     public void addCandidato(Aluno aluno) {
-        candidatos.add(aluno);
+        if(!candidatos.contains(aluno)){
+            candidatos.add(aluno);
+        }
     }
 
     public Long getId() {
