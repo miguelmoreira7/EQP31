@@ -3,5 +3,5 @@ package com.eqp3e1.repository;
 import com.eqp3e1.model.Coordenador;
 import org.springframework.data.repository.CrudRepository;
 
-public interface CoordenadorRepository extends CrudRepository<Coordenador, Integer> {
+public interface CoordenadorRepository extends CrudRepository<Coordenador, Long> {
 }

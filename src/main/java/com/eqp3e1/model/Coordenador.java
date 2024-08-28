@@ -20,22 +20,35 @@ public class Coordenador {
     @Column(nullable = false, length = 100)
     private String senha;
 
-    // Métodos
-    public void alterarCadastroEmpresa(Empresa empresa) {
-        // Implementação para alterar cadastro de empresa
+    public Long getId() {
+        return id;
     }
 
-    public void acompanharCandidatos() {
-        // Implementação para acompanhar candidatos
+    public void setId(Long id) {
+        this.id = id;
     }
 
-    public void acompanharOfertas() {
-        // Implementação para acompanhar ofertas
+    public String getNome() {
+        return nome;
     }
 
-    public void acompanharEstagios() {
-        // Implementação para acompanhar estágios
+    public void setNome(String nome) {
+        this.nome = nome;
     }
 
-    // Getters and Setters
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
 }

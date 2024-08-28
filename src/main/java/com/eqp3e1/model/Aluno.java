@@ -31,15 +31,62 @@ public class Aluno {
     @OneToMany(mappedBy = "aluno")
     private List<Estagio> estagios;
 
-    // Métodos
-    public void candidatar(OfertaEstagio oferta) {
-        // Implementação para candidatura
+    @ManyToMany(mappedBy = "candidatos")
+    private List<OfertaEstagio> candidaturas;
+
+    public List<OfertaEstagio> getCandidaturas() {
+        return candidaturas;
     }
 
-    public List<Estagio> consultarCandidaturas() {
-        // Implementação para consultar candidaturas
+    public void setCandidaturas(List<OfertaEstagio> candidaturas) {
+        this.candidaturas = candidaturas;
+    }
+
+    public List<Habilidade> getHabilidades() {
+        return habilidades;
+    }
+
+    public void setHabilidades(List<Habilidade> habilidades) {
+        this.habilidades = habilidades;
+    }
+
+    public String getSenha() {
+        return senha;
+    }
+
+    public void setSenha(String senha) {
+        this.senha = senha;
+    }
+
+    public String getUsername() {
+        return username;
+    }
+
+    public void setUsername(String username) {
+        this.username = username;
+    }
+
+    public String getNome() {
+        return nome;
+    }
+
+    public void setNome(String nome) {
+        this.nome = nome;
+    }
+
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public List<Estagio> getEstagios() {
         return estagios;
     }
 
-    // Getters and Setters
+    public void setEstagios(List<Estagio> estagios) {
+        this.estagios = estagios;
+    }
 }

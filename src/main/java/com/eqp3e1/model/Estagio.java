@@ -15,12 +15,12 @@ public class Estagio {
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name = "oferta_estagio_id", nullable = false)
-    private OfertaEstagio ofertaEstagio;
-
-    @ManyToOne
     @JoinColumn(name = "aluno_id", nullable = false)
     private Aluno aluno;
+
+    @ManyToOne
+    @JoinColumn(name = "empresa_id", nullable = false)
+    private Empresa empresa;
 
     @Column(nullable = false)
     private LocalDate dataInicio;
@@ -31,10 +31,51 @@ public class Estagio {
     @Column
     private BigDecimal valorBolsa;
 
-    // Métodos
-    public void baixarTermoEstagio() {
-        // Implementação para baixar termo de estágio
+    public Long getId() {
+        return id;
     }
 
-    // Getters and Setters
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Empresa getEmpresa() {
+        return empresa;
+    }
+
+    public void setEmpresa(Empresa empresa) {
+        this.empresa = empresa;
+    }
+
+    public Aluno getAluno() {
+        return aluno;
+    }
+
+    public void setAluno(Aluno aluno) {
+        this.aluno = aluno;
+    }
+
+    public LocalDate getDataInicio() {
+        return dataInicio;
+    }
+
+    public void setDataInicio(LocalDate dataInicio) {
+        this.dataInicio = dataInicio;
+    }
+
+    public LocalDate getDataTermino() {
+        return dataTermino;
+    }
+
+    public void setDataTermino(LocalDate dataTermino) {
+        this.dataTermino = dataTermino;
+    }
+
+    public BigDecimal getValorBolsa() {
+        return valorBolsa;
+    }
+
+    public void setValorBolsa(BigDecimal valorBolsa) {
+        this.valorBolsa = valorBolsa;
+    }
 }
