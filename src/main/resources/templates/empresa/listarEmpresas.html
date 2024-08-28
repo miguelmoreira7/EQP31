@@ -9,6 +9,9 @@
 <div th:replace="~{partials/_navbar :: navbar}"></div>
 <div class="container mt-4">
     <h2>Lista de Empresas</h2>
+    <div class="mb-3">
+        <a class="btn btn-success" th:href="@{/empresa/registro}">Nova Empresa</a>
+    </div>
     <div th:if="${empresas != null}">
         <table class="table table-bordered">
             <thead>
@@ -27,7 +30,7 @@
                 <td>
                     <!-- Link para a página de registro de nova oferta de estágio -->
                     <a class="btn btn-primary"
-                       th:href="@{/oferta-estagio/registrar/{empresaId}(empresaId=${empresa.id})}">
+                       th:href="@{/oferta/registrar/{empresaId}(empresaId=${empresa.id})}">
                         Nova Oferta de Estágio
                     </a>
                 </td>

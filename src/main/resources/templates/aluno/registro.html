@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Registro de Aluno</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{partials/_navbar :: navbar}"></div>
+<div class="container mt-4">
+    <h2>Registrar Aluno</h2>
+    <form th:action="@{/aluno/registrar}" th:object="${aluno}" method="post">
+        <div class="mb-3">
+            <label for="nome" class="form-label">Nome</label>
+            <input type="text" class="form-control" id="nome" th:field="*{nome}" required>
+            <p th:if="${#fields.hasErrors('nome')}" th:errorclass="error" th:errors="*{nome}">Nome Error</p>
+        </div>
+        <div class="mb-3">
+            <label for="username" class="form-label">Username</label>
+            <input type="text" class="form-control" id="username" th:field="*{username}" required>
+            <p th:if="${#fields.hasErrors('username')}" th:errorclass="error" th:errors="*{username}">Username Error</p>
+        </div>
+        <div class="mb-3">
+            <label for="senha" class="form-label">Senha</label>
+            <input type="password" class="form-control" id="senha" th:field="*{senha}" required>
+            <p th:if="${#fields.hasErrors('senha')}" th:errorclass="error" th:errors="*{senha}">Senha Error</p>
+        </div>
+        <div class="mb-3">
+            <label for="habilidades" class="form-label">Habilidades</label>
+            <select class="form-select" id="habilidades" multiple th:field="*{habilidades}">
+                <option th:each="habilidade : ${habilidadesDisponiveis}" th:value="${habilidade.id}" th:text="${habilidade.nome}"></option>
+            </select>
+            <p th:if="${#fields.hasErrors('habilidades')}" th:errorclass="error" th:errors="*{habilidades}">Habilidades Error</p>
+        </div>
+        <button type="submit" class="btn btn-primary">Registrar</button>
+    </form>
+</div>
+</body>
+</html>

@@ -30,6 +30,9 @@ public class AlunoService {
         return alunoRepository.findAll();
     }
 
+    public List<Aluno> listarAlunosComCandidaturas() {
+        return alunoRepository.findAllWithCandidaturas();
+    }
     public void deletar(Long id) {
         alunoRepository.deleteById(id);
     }

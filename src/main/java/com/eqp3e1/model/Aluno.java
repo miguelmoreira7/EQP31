@@ -31,7 +31,7 @@ public class Aluno {
     @OneToMany(mappedBy = "aluno")
     private List<Estagio> estagios;
 
-    @ManyToMany(mappedBy = "candidatos")
+    @ManyToMany(mappedBy = "candidatos", fetch = FetchType.LAZY)
     private List<OfertaEstagio> candidaturas;
 
     public List<OfertaEstagio> getCandidaturas() {
