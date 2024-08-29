@@ -34,14 +34,25 @@
             <input type="text" class="form-control" id="preRequisitos" th:field="*{preRequisitos}" placeholder="Digite os pré-requisitos separados por vírgula">
         </div>
         <div class="mb-3">
-            <label for="habilidadesNecessarias" class="form-label">Habilidades Necessárias</label>
-            <input type="text" class="form-control" id="habilidadesNecessarias" th:field="*{habilidadesNecessarias}" placeholder="Digite as habilidades separadas por vírgula">
+            <label class="form-label">Habilidades necessárias</label>
+            <div th:each="habilidade : ${habilidadesDisponiveis}">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" th:field="*{habilidadesNecessarias}" th:value="${habilidade.id}" id="habilidadeNecessaria-${habilidade.id}">
+                    <label class="form-check-label" th:attr="for='habilidade-' + ${habilidade.id}" th:text="${habilidade.nome}"></label>
+                </div>
+            </div>
+            <p th:if="${#fields.hasErrors('habilidadesNecessarias')}" th:errorclass="error" th:errors="*{habilidadesNecessarias}">Habilidades Error</p>
         </div>
         <div class="mb-3">
-            <label for="habilidadesDesejaveis" class="form-label">Habilidades Desejáveis</label>
-            <input type="text" class="form-control" id="habilidadesDesejaveis" th:field="*{habilidadesDesejaveis}" placeholder="Digite as habilidades separadas por vírgula">
+            <label class="form-label">Habilidades Desejáveis</label>
+            <div th:each="habilidade : ${habilidadesDisponiveis}">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" th:field="*{habilidadesDesejaveis}" th:value="${habilidade.id}" id="habilidadeDesejavel-${habilidade.id}">
+                    <label class="form-check-label" th:attr="for='habilidade-' + ${habilidade.id}" th:text="${habilidade.nome}"></label>
+                </div>
+            </div>
+            <p th:if="${#fields.hasErrors('habilidadesDesejaveis')}" th:errorclass="error" th:errors="*{habilidadesDesejaveis}">Habilidades Error</p>
         </div>
-
         <button type="submit" class="btn btn-primary">Criar Oferta</button>
     </form>
 </div>

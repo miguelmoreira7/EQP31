@@ -46,6 +46,14 @@ public class Aluno {
         return habilidades;
     }
 
+    public String getHabilidadesString() {
+        String habilidades = "";
+        for (Habilidade habilidade : this.habilidades) {
+            habilidades += habilidade.getNome() + ", ";
+        }
+        return habilidades;
+    }
+
     public void setHabilidades(List<Habilidade> habilidades) {
         this.habilidades = habilidades;
     }

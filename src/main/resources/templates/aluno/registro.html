@@ -26,10 +26,13 @@
             <p th:if="${#fields.hasErrors('senha')}" th:errorclass="error" th:errors="*{senha}">Senha Error</p>
         </div>
         <div class="mb-3">
-            <label for="habilidades" class="form-label">Habilidades</label>
-            <select class="form-select" id="habilidades" multiple th:field="*{habilidades}">
-                <option th:each="habilidade : ${habilidadesDisponiveis}" th:value="${habilidade.id}" th:text="${habilidade.nome}"></option>
-            </select>
+            <label class="form-label">Habilidades</label>
+            <div th:each="habilidade : ${habilidadesDisponiveis}">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" th:field="*{habilidades}" th:value="${habilidade.id}" id="habilidade-${habilidade.id}">
+                    <label class="form-check-label" th:attr="for='habilidade-' + ${habilidade.id}" th:text="${habilidade.nome}"></label>
+                </div>
+            </div>
             <p th:if="${#fields.hasErrors('habilidades')}" th:errorclass="error" th:errors="*{habilidades}">Habilidades Error</p>
         </div>
         <button type="submit" class="btn btn-primary">Registrar</button>

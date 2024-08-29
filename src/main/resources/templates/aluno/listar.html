@@ -10,12 +10,16 @@
 <div th:replace="~{partials/_navbar :: navbar}"></div>
 <div class="container mt-4">
   <h2>Listagem de Alunos</h2>
+  <div class="mb-3">
+    <a class="btn btn-success" th:href="@{/aluno/registro}">Novo aluno</a>
+  </div>
   <table class="table table-striped">
     <thead>
     <tr>
       <th>Nome</th>
       <th>Username</th>
       <th>Candidaturas</th>
+      <th>Ações</th>
     </tr>
     </thead>
     <tbody>
@@ -27,6 +31,17 @@
           <li th:each="candidatura : ${aluno.getCandidaturas()}"
               th:text="${candidatura.getId()} + ' - ' + ${candidatura.getAtividadePrincipal()}"></li>
         </ul>
+      </td>
+      <td>
+          <a class="btn btn-warning"
+             th:href="@{/aluno/ficha/{alunoId}(alunoId=${aluno.id})}">
+            Ficha
+          </a>
+<!--          <a class="btn btn-danger"-->
+<!--             th:href="@{/aluno/deletar/{alunoId}(alunoId=${aluno.id})}"-->
+<!--             onclick="return confirm('Tem certeza que deseja deletar este usuário?');">-->
+<!--            Deletar-->
+<!--          </a>-->
       </td>
     </tr>
     </tbody>

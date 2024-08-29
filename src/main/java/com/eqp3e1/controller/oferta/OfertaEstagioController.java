@@ -6,6 +6,7 @@ import com.eqp3e1.model.OfertaEstagio;
 import com.eqp3e1.model.StatusOferta;
 import com.eqp3e1.service.AlunoService;
 import com.eqp3e1.service.EmpresaService;
+import com.eqp3e1.service.HabilidadeService;
 import com.eqp3e1.service.OfertaEstagioService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,10 +23,15 @@ public class OfertaEstagioController {
 
     @Autowired
     private OfertaEstagioService ofertaEstagioService;
+
     @Autowired
     private AlunoService alunoService;
+
     @Autowired
     private EmpresaService empresaService;
+
+    @Autowired
+    private HabilidadeService habilidadeService;
 
     @GetMapping("/todas")
     public String listarOfertas(Model model) {
@@ -41,6 +47,7 @@ public class OfertaEstagioController {
         OfertaEstagio ofertaEstagio = new OfertaEstagio();
         model.addAttribute("ofertaEstagio", ofertaEstagio);
         model.addAttribute("empresaId", empresaId); // Passando o ID da empresa para o formulário
+        model.addAttribute("habilidadesDisponiveis", habilidadeService.listarTodas());
         return "ofertas/registrarOfertaEstagio";
     }
 

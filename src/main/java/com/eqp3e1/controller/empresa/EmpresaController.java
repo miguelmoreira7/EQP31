@@ -3,6 +3,7 @@ package com.eqp3e1.controller.empresa;
 import com.eqp3e1.model.Empresa;
 import com.eqp3e1.model.OfertaEstagio;
 import com.eqp3e1.service.EmpresaService;
+import com.eqp3e1.service.HabilidadeService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +20,9 @@ public class EmpresaController {
 
     @Autowired
     private EmpresaService empresaService;
+
+    @Autowired
+    private HabilidadeService habilidadeService;
 
     @GetMapping("/registro")
     public String mostrarFormularioRegistro(Model model) {
@@ -50,6 +54,7 @@ public class EmpresaController {
             OfertaEstagio novaOferta = new OfertaEstagio();
             novaOferta.setEmpresa(empresa);
             model.addAttribute("ofertaEstagio", novaOferta);
+            model.addAttribute("habilidadesDisponiveis", habilidadeService.listarTodas());
             return "criar_oferta";
         }
         return "redirect:/empresa/todas";

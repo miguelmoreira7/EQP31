@@ -1,6 +1,7 @@
 package com.eqp3e1.controller.aluno;
 
 import com.eqp3e1.model.Aluno;
+import com.eqp3e1.model.Habilidade;
 import com.eqp3e1.model.OfertaEstagio;
 import com.eqp3e1.service.AlunoService;
 import com.eqp3e1.service.HabilidadeService;
