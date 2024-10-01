@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
 <meta charset="UTF-8">
-<title>Ficha da Oferta de Estágio</title>
+<title>Candidatos</title>
 <link
 	href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
 	rel="stylesheet">
@@ -10,17 +10,6 @@
 <body>
 	<div th:replace="~{partials/_navbar :: navbar}"></div>
 	<div class="container mt-4">
-		<h2>Ficha da Oferta de Estágio</h2>
-		<p>
-			ID: <span th:text="${oferta.getId()}"></span>
-		</p>
-		<p>
-			Atividade Principal: <span
-				th:text="${oferta.getAtividadePrincipal()}"></span>
-		</p>
-		<p>
-			Empresa: <span th:text="${oferta.getEmpresa().getNome()}"></span>
-		</p>
 
 		<table class="table table-striped">
 			<thead>

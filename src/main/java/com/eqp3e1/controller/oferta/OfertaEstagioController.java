@@ -93,4 +93,10 @@ public class OfertaEstagioController {
         model.addAttribute("oferta", ofertaEstagioService.buscarPorId(id).orElseThrow(() -> new RuntimeException("Oferta de Estágio não encontrada")));
         return "ofertas/ficha";
     }
+    
+    @GetMapping("/candidatos/{id}")
+    public String candidatos(@PathVariable("id") Long id, Model model) {
+        model.addAttribute("oferta", ofertaEstagioService.buscarPorId(id).orElseThrow(() -> new RuntimeException("Oferta de Estágio não encontrada")));
+        return "ofertas/candidatos";
+    }
 }
