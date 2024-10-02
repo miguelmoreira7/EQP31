@@ -26,13 +26,27 @@
                         <a class="nav-link" th:href="@{/empresa/todas}">Listar Empresas</a>
                     </li>
 
+                    <!-- Se o usuário for um aluno -->
+                    <li class="nav-item" th:if="${#authorization.expression('hasRole(''USER'')')}">
+                        <a class="nav-link" th:href="@{/candidaturas/minhas}">Minhas Candidaturas</a>
+                    </li>
+
+                    <!-- Se o usuário for uma empresa -->
+                    <li class="nav-item" th:if="${#authorization.expression('hasRole(''EMPRESA'')')}">
+                        <a class="nav-link" th:href="@{/oferta/nova}">Criar Nova Oferta</a>
+                    </li>
+
+                    <li class="nav-item" th:if="${#authorization.expression('hasRole(''EMPRESA'')')}">
+                        <a class="nav-link" th:href="@{/oferta/minhas}">Minhas Ofertas</a>
+                    </li>
+
                     <!-- Listar Alunos -->
-                    <li class="nav-item">
+                    <li class="nav-item" th:if="${#authorization.expression('hasRole(''ADMIN'')')}">
                         <a class="nav-link" th:href="@{/aluno/todos}">Listar Alunos</a>
                     </li>
 
                     <!-- Dropdown para Aluno -->
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown" th:if="${#authorization.expression('!isAuthenticated()')}">
                         <a class="nav-link dropdown-toggle" href="#" id="alunoDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Aluno
                         </a>
@@ -43,7 +57,7 @@
                     </li>
 
                     <!-- Dropdown para Empresa -->
-                    <li class="nav-item dropdown">
+                    <li class="nav-item dropdown" th:if="${#authorization.expression('!isAuthenticated()')}">
                         <a class="nav-link dropdown-toggle" href="#" id="empresaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
                             Empresa
                         </a>
@@ -51,6 +65,14 @@
                             <li><a class="dropdown-item" th:href="@{/auth/login}">Login</a></li>
                             <li><a class="dropdown-item" th:href="@{/empresa/registro}">Registro</a></li>
                         </ul>
+                    </li>
+
+                    <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
+                        <form th:action="@{/auth/logout}" method="POST">
+                            <button type="submit" class="nav-link">
+                                Logout
+                            </button>
+                        </form>
                     </li>
 
                 </ul>

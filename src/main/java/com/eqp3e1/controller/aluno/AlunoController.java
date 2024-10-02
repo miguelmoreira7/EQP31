@@ -53,7 +53,7 @@ public class AlunoController {
         }
 
         alunoService.salvar(aluno);
-        UserDetails user = User.withUsername(aluno.getUsername()).password(new BCryptPasswordEncoder().encode("a")).roles("USER").build();
+        UserDetails user = User.withUsername(aluno.getUsername()).password(new BCryptPasswordEncoder().encode(aluno.getSenha())).roles("USER").build();
         userService.save(user);
 
         return "redirect:/aluno/todos";
