@@ -5,13 +5,20 @@ import com.eqp3e1.model.Habilidade;
 import com.eqp3e1.model.OfertaEstagio;
 import com.eqp3e1.service.AlunoService;
 import com.eqp3e1.service.HabilidadeService;
+import com.eqp3e1.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.provisioning.JdbcUserDetailsManager;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Collections;
 import java.util.List;
 import java.util.Optional;
 
@@ -24,6 +31,12 @@ public class AlunoController {
 
     @Autowired
     private HabilidadeService habilidadeService;
+
+    @Autowired
+    private PasswordEncoder passwordEncoder;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/registro")
     public String mostrarFormularioRegistro(Model model){
@@ -40,6 +53,9 @@ public class AlunoController {
         }
 
         alunoService.salvar(aluno);
+        UserDetails user = User.withUsername(aluno.getUsername()).password(new BCryptPasswordEncoder().encode("a")).roles("USER").build();
+        userService.save(user);
+
         return "redirect:/aluno/todos";
     }
 

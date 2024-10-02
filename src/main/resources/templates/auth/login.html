@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title th:text="${role == 'aluno' ? 'Login Aluno' : 'Login Empresa'}"></title>
+</head>
+<body>
+<form class="form-signin" method="POST" th:action="@{/auth/login}">
+    <h1 class="h3 mb-3 font-weight-normal text-center">Por favor, autentique-se</h1>
+
+    <div class="alert alert-danger alert-dismissible fade show" role="alert" th:if="${param.error} ">Login e/ou senha inválidos!</div>
+
+    </div>
+
+    <label class="sr-only" for="username">Login</label>
+    <input autofocus class="form-control input-login" id="username" name="username" placeholder="Login" required type="text">
+
+    <label class="sr-only" for="password">Senha</label>
+    <input class="form-control input-login" id="password" name="password" placeholder="Senha" required type="password">
+
+    <div class="checkbox mb-3">
+        <label> <input type="checkbox" value="lembrar">
+            Lembrar-me
+        </label>
+    </div>
+    <button class="btn btn-lg btn-primary" type="submit">Entrar</button>
+</form>
+
+</body>
+</html>
