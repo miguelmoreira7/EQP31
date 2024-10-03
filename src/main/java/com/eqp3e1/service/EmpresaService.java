@@ -24,7 +24,18 @@ public class EmpresaService {
     private EstagioService estagioService;
 
     public Empresa salvar(Empresa empresa) {
-        return empresaRepository.save(empresa);
+        if (empresa.getId() !=null ){
+            Empresa existingEmpresa = empresaRepository.findById(empresa.getId())
+            .orElseThrow(() ->  new RuntimeException("Empresa nao encontrada"));
+            existingEmpresa.setCnpj(empresa.getCnpj());
+            existingEmpresa.setNome(empresa.getNome());
+            existingEmpresa.setTelefone(empresa.getTelefone());
+            existingEmpresa.setEndereco(empresa.getEndereco());
+            existingEmpresa.setEmail(empresa.getEmail());
+
+            return empresaRepository.save(existingEmpresa);
+        } else
+            return empresaRepository.save(empresa);
     }
 
     public Optional<Empresa> buscarPorId(Long id) {
@@ -63,6 +74,4 @@ public class EmpresaService {
             throw new RuntimeException("Oferta de Estágio não encontrada.");
         }
     }
-
-
 }
