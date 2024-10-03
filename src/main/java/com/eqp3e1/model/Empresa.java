@@ -1,5 +1,6 @@
 package com.eqp3e1.model;
 
+import com.eqp3e1.model.groups.OnCreate;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.*;
 
@@ -38,7 +39,7 @@ public class Empresa {
     private String email;
 
     @Column(nullable = false , length = 100)
-    @NotBlank(message = "A senha é obrigatória")
+    @NotBlank(groups = OnCreate.class, message = "A senha é obrigatória")
     private String senha;
 
     public @NotBlank(message = "A senha é obrigatória") String getSenha() {

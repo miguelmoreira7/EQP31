@@ -2,14 +2,16 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
-    <title>Registro de Empresa</title>
+    <title th:text="${pageTitle}">Empresa</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
 </head>
 <body>
 <div th:replace="~{partials/_navbar :: navbar}"></div>
 <div class="container mt-4">
-    <h2>Registrar Empresa</h2>
-    <form th:action="@{/empresa/registrar}" th:object="${empresa}" method="post">
+    <h2 th:text="${formTitle}">Empresa</h2>
+    <form th:action="@{${formAction}}" th:object="${empresa}" method="post">
+        <input type="hidden" th:if="${empresa.id != null}" th:field="*{id}" />
+
         <div class="mb-3">
             <label for="nome" class="form-label">Nome</label>
             <input type="text" class="form-control" id="nome" th:field="*{nome}" required>
@@ -33,12 +35,14 @@
             <input type="email" class="form-control" id="email" th:field="*{email}">
             <p th:if="${#fields.hasErrors('email')}" th:errors="*{email}">Email Error</p>
         </div>
-        <div class="mb-3">
+
+        <div class="mb-3" th:if="${empresa.id == null}">
             <label for="senha">Senha:</label>
-            <input type="password" id="senha" th:field="*{senha}" />
+            <input type="password" id="senha" th:field="*{senha}" required />
             <p th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}">Senha Error</p>
         </div>
-        <button type="submit" class="btn btn-primary">Registrar</button>
+
+        <button type="submit" class="btn btn-primary" th:text="${submitButtonLabel}">Enviar</button>
     </form>
 </div>
 </body>
