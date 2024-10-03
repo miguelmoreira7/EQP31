@@ -40,8 +40,9 @@ public class SecurityConfig {
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/empresa/registro", "/empresa/registrar", "aluno/registro", "/aluno/registrar", "/oferta/todas", "/empresa/todas").permitAll()  // Permite acesso público aos recursos estáticos
-                        .requestMatchers("/oferta/**").hasRole("ADMIN")// Apenas admins podem acessar ofertas
+                        .requestMatchers("/", "/empresa/registro", "/empresa/registrar", "aluno/registro", "/aluno/registrar", "/oferta/todas", "/oferta/candidatos/**","/empresa/todas").permitAll()  // Permite acesso público aos recursos estáticos
+                        .requestMatchers("/oferta/candidatar", "/aluno/minha-ficha").hasRole("USER")
+                        .requestMatchers("/oferta/cadastrarEstagio", "/oferta/cancelar", "/oferta/salvar").hasRole("ADMIN")// Apenas admins podem acessar ofertas
                         .anyRequest().authenticated())  // Qualquer outra rota requer autenticação
                 .formLogin((form) -> form
                         .loginPage("/auth/login")  // Página de login personalizada

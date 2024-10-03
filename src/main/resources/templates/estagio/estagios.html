@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title><!DOCTYPE html>
+      <html xmlns:th="http://www.thymeleaf.org">
+      <head>
+      <meta charset="UTF-8">
+      <title>Lista de Estágios</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div th:replace="~{partials/_navbar :: navbar}"></div>
+<div class="container mt-4">
+  <h2>Lista de Estágios</h2>
+  <table class="table table-striped">
+    <thead>
+    <tr>
+      <th>Aluno</th>
+      <th>Empresa</th>
+      <th>Data de Início</th>
+      <th>Data de Término</th>
+      <th>Valor da Bolsa</th>
+    </tr>
+    </thead>
+    <tbody>
+    <tr th:each="estagio : ${estagios}">
+      <td th:text="${estagio.aluno.nome}"></td>
+      <td th:text="${estagio.empresa.nome}"></td>
+      <td th:text="${estagio.dataInicio}"></td>
+      <td th:text="${estagio.dataTermino}"></td>
+      <td th:text="${estagio.valorBolsa}"></td>
+    </tr>
+    </tbody>
+  </table>
+</div>
+</body>
+</html>
+</title>
+</head>
+<body>
+
+</body>
+</html>

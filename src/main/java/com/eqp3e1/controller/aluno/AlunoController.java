@@ -8,6 +8,8 @@ import com.eqp3e1.service.HabilidadeService;
 import com.eqp3e1.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.security.core.userdetails.User;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -79,4 +81,27 @@ public class AlunoController {
             throw new RuntimeException("Aluno não encontrado.");
         }
     }
+
+    @GetMapping("/minha-ficha")
+    public String minhaFicha(Model model){
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication.getPrincipal() instanceof String && authentication.getPrincipal().equals("anonymousUser"))) {
+            String username = authentication.getName();
+
+            Optional<Aluno> alunoOpt = alunoService.findByUsername(username);
+            if (alunoOpt.isPresent()) {
+                Aluno aluno = alunoOpt.get();
+                List<OfertaEstagio> candidaturas = aluno.getCandidaturas();
+                model.addAttribute("aluno", aluno);
+                model.addAttribute("candidaturas", candidaturas);
+                return "aluno/ficha";
+            } else {
+                throw new RuntimeException("Aluno não encontrado.");
+            }
+        }
+        return "aluno/ficha";
+    }
+
 }

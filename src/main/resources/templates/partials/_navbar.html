@@ -16,6 +16,10 @@
             <div class="collapse navbar-collapse" id="navbarNav">
                 <ul class="navbar-nav ms-auto">
 
+                    <li class="nav-item" >
+                        <a class="nav-link" th:href="@{/estagio/todos}">Estágios</a>
+                    </li>
+
                     <!-- Ofertas de Estágio -->
                     <li class="nav-item">
                         <a class="nav-link" th:href="@{/oferta/todas}">Ofertas de Estágio</a>
@@ -28,7 +32,7 @@
 
                     <!-- Se o usuário for um aluno -->
                     <li class="nav-item" th:if="${#authorization.expression('hasRole(''USER'')')}">
-                        <a class="nav-link" th:href="@{/candidaturas/minhas}">Minhas Candidaturas</a>
+                        <a class="nav-link" th:href="@{/aluno/minha-ficha}">Minhas Candidaturas</a>
                     </li>
 
                     <!-- Se o usuário for uma empresa -->
@@ -45,27 +49,20 @@
                         <a class="nav-link" th:href="@{/aluno/todos}">Listar Alunos</a>
                     </li>
 
-                    <!-- Dropdown para Aluno -->
                     <li class="nav-item dropdown" th:if="${#authorization.expression('!isAuthenticated()')}">
-                        <a class="nav-link dropdown-toggle" href="#" id="alunoDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Aluno
+                        <a class="nav-link dropdown-toggle" href="#" id="registroDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
+                            Registro
                         </a>
-                        <ul class="dropdown-menu" aria-labelledby="alunoDropdown">
-                            <li><a class="dropdown-item" th:href="@{/auth/login}">Login</a></li>
-                            <li><a class="dropdown-item" th:href="@{/aluno/registro}">Registro</a></li>
+                        <ul class="dropdown-menu" aria-labelledby="registroDropdown">
+                            <li><a class="dropdown-item" th:href="@{/aluno/registro}">Registrar Aluno</a></li>
+                            <li><a class="dropdown-item" th:href="@{/empresa/registro}">Registrar Empresa</a></li>
                         </ul>
                     </li>
 
-                    <!-- Dropdown para Empresa -->
-                    <li class="nav-item dropdown" th:if="${#authorization.expression('!isAuthenticated()')}">
-                        <a class="nav-link dropdown-toggle" href="#" id="empresaDropdown" role="button" data-bs-toggle="dropdown" aria-expanded="false">
-                            Empresa
-                        </a>
-                        <ul class="dropdown-menu" aria-labelledby="empresaDropdown">
-                            <li><a class="dropdown-item" th:href="@{/auth/login}">Login</a></li>
-                            <li><a class="dropdown-item" th:href="@{/empresa/registro}">Registro</a></li>
-                        </ul>
+                    <li class="nav-item" th:if="${#authorization.expression('!isAuthenticated()')}">
+                        <a class="nav-link" th:href="@{/auth/login}">Login</a>
                     </li>
+
 
                     <li class="nav-item" th:if="${#authorization.expression('isAuthenticated()')}">
                         <form th:action="@{/auth/logout}" method="POST">

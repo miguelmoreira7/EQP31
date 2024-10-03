@@ -1,25 +1,29 @@
 package com.eqp3e1.controller.oferta;
 
-import com.eqp3e1.model.Aluno;
-import com.eqp3e1.model.Empresa;
-import com.eqp3e1.model.OfertaEstagio;
-import com.eqp3e1.model.StatusOferta;
-import com.eqp3e1.service.AlunoService;
-import com.eqp3e1.service.EmpresaService;
-import com.eqp3e1.service.HabilidadeService;
-import com.eqp3e1.service.OfertaEstagioService;
+import com.eqp3e1.model.*;
+import com.eqp3e1.service.*;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.expression.ExpressionException;
+import org.springframework.format.annotation.DateTimeFormat;
+import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
 @Controller
 @RequestMapping("/oferta")
 public class OfertaEstagioController {
+
+    @Autowired
+    private EstagioService estagioService;
 
     @Autowired
     private OfertaEstagioService ofertaEstagioService;
@@ -36,9 +40,20 @@ public class OfertaEstagioController {
     @GetMapping("/todas")
     public String listarOfertas(Model model) {
         List<OfertaEstagio> ofertas = ofertaEstagioService.listarTodas();
-        List<Aluno> alunos = alunoService.listarTodos();
         model.addAttribute("ofertas", ofertas);
-        model.addAttribute("alunos", alunos);
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication.getPrincipal() instanceof String && authentication.getPrincipal().equals("anonymousUser"))) {
+            String username = authentication.getName();
+
+            Optional<Aluno> alunoOpt = alunoService.findByUsername(username);
+            if (alunoOpt.isPresent()) {
+                Aluno aluno = alunoOpt.get();
+                model.addAttribute("alunoId", aluno.getId());
+            }
+        }
+
         return "ofertas/ofertas";
     }
 
@@ -54,7 +69,6 @@ public class OfertaEstagioController {
     @PostMapping("/salvar")
     public String salvarOfertaEstagio(@ModelAttribute OfertaEstagio ofertaEstagio, @RequestParam Long empresaId) {
         Optional<Empresa> empresaOpt = empresaService.buscarPorId(empresaId);
-        System.out.println(empresaId);
         if (empresaOpt.isPresent()) {
             Empresa empresa = empresaOpt.get();
             ofertaEstagio.setEmpresa(empresa);
@@ -65,6 +79,7 @@ public class OfertaEstagioController {
     }
 
     @PostMapping("/candidatar")
+    @PreAuthorize("isAuthenticated()")
     public String candidatarAluno(@RequestParam("alunoId") Long alunoId,
                                   @RequestParam("ofertaId") Long ofertaId,
                                   Model model) {
@@ -88,15 +103,58 @@ public class OfertaEstagioController {
         return "redirect:/oferta/todas"; // Redireciona para a página de ofertas após a exclusão
     }
 
-    @GetMapping("/ficha/{id}")
-    public String fichaOferta(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("oferta", ofertaEstagioService.buscarPorId(id).orElseThrow(() -> new RuntimeException("Oferta de Estágio não encontrada")));
-        return "ofertas/ficha";
+    @GetMapping("/{ofertaId}/candidatos")
+    public String fichaOferta(@PathVariable Long ofertaId, Model model) {
+        Optional<OfertaEstagio> ofertaOpt = ofertaEstagioService.buscarPorId(ofertaId);
+        if (ofertaOpt.isPresent()) {
+            OfertaEstagio oferta = ofertaOpt.get();
+
+            // Retrieve the list of candidate students for this offer
+            List<Aluno> candidatos = oferta.getCandidaturas();
+
+            // Add the offer and candidates to the model
+            model.addAttribute("oferta", oferta);
+            model.addAttribute("candidatos", candidatos);
+
+        }
+        return "ofertas/listarCandidatos";
     }
-    
+
     @GetMapping("/candidatos/{id}")
     public String candidatos(@PathVariable("id") Long id, Model model) {
         model.addAttribute("oferta", ofertaEstagioService.buscarPorId(id).orElseThrow(() -> new RuntimeException("Oferta de Estágio não encontrada")));
         return "ofertas/candidatos";
+    }
+
+    @PreAuthorize("hasRole('ADMIN')")
+    @PostMapping("/{ofertaId}/converterEmEstagio")
+    public String selecionarCandidato(
+            @PathVariable Long ofertaId,
+            @RequestParam("alunoId") Long alunoId,
+            @RequestParam("dataInicio") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataInicio,
+            @RequestParam("dataTermino") @DateTimeFormat(iso = DateTimeFormat.ISO.DATE) LocalDate dataTermino) {
+        Optional<OfertaEstagio> ofertaOpt = ofertaEstagioService.buscarPorId(ofertaId);
+
+        if (ofertaOpt.isPresent()) {
+            OfertaEstagio oferta = ofertaOpt.get();
+            Optional<Aluno> alunoOpt = alunoService.buscarPorId(alunoId);
+            if (alunoOpt.isPresent()) {
+                Aluno aluno = alunoOpt.get();
+
+                Estagio estagio = ofertaEstagioService.converterEmEstagio(ofertaId, aluno, dataInicio, dataTermino);
+
+                estagioService.salvar(estagio);
+
+                Empresa empresa = oferta.getEmpresa();
+                empresa.getEstagios().add(estagio);
+                empresaService.salvar(empresa);
+
+            } else {
+                throw new RuntimeException("Oferta de Estágio ou Aluno não encontrados.");
+            }
+        }
+        ofertaEstagioService.deletar(ofertaId);
+
+        return "redirect:/estagio/todos";
     }
 }

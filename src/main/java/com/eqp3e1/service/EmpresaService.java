@@ -64,27 +64,5 @@ public class EmpresaService {
         }
     }
 
-    public void selecionarCandidato(Long ofertaId, Long alunoId) {
-        Optional<OfertaEstagio> ofertaOpt = ofertaEstagioService.buscarPorId(ofertaId);
-        Optional<Aluno> alunoOpt = alunoService.buscarPorId(alunoId);
 
-        if (ofertaOpt.isPresent() && alunoOpt.isPresent()) {
-            OfertaEstagio oferta = ofertaOpt.get();
-            Aluno aluno = alunoOpt.get();
-            Estagio estagio = ofertaEstagioService.converterEmEstagio(ofertaId, aluno);
-            Long empresaId =  estagio.getEmpresa().getId();
-            Optional<Empresa> empresaOpt = empresaRepository.findById(empresaId);
-            if (empresaOpt.isPresent()) {
-                Empresa empresa = empresaOpt.get();
-                empresa.setEstagios(estagio);
-
-            }
-
-            estagioService.salvar(estagio);
-
-
-        } else {
-            throw new RuntimeException("Oferta de Estágio ou Aluno não encontrados.");
-        }
-    }
 }

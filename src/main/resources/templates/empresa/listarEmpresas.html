@@ -16,7 +16,7 @@
                 <th>ID</th>
                 <th>Nome</th>
                 <th>CNPJ</th>
-                <th>Ações</th>
+                <th th:if="${#authorization.expression('isAuthenticated()')} and ${#authorization.expression('hasRole(''ADMIN'')')}">Ações</th>
             </tr>
             </thead>
             <tbody>
@@ -25,11 +25,16 @@
                 <td th:text="${empresa.nome}">Nome Empresa</td>
                 <td th:text="${empresa.cnpj}">CNPJ Empresa</td>
                 <td>
-                    <!-- Link para a página de registro de nova oferta de estágio -->
-                    <a class="btn btn-primary"
-                       th:href="@{/oferta/registrar/{empresaId}(empresaId=${empresa.id})}">
-                        Nova Oferta de Estágio
-                    </a>
+                    <div th:if="${#authorization.expression('isAuthenticated()')} and ${#authorization.expression('hasRole(''ADMIN'')')}">
+                        <a class="btn btn-primary"
+                           th:href="@{/oferta/registrar/{empresaId}(empresaId=${empresa.id})}">
+                            Nova Oferta de Estágio
+                        </a>
+                        <a class="btn btn-warning"
+                           th:href="@{/empresa/editar/{id}(id=${empresa.id})}">
+                            Editar
+                        </a>
+                    </div>
                 </td>
             </tr>
             </tbody>
