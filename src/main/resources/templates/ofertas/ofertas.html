@@ -20,7 +20,7 @@
 					<th>Empresa</th>
 					<th>Carga Horária Semanal</th>
 					<th>Candidatos</th>
-					<th class="text-center">Ação</th>
+					<th th:if="${#authorization.expression('isAuthenticated()')} and ${#authorization.expression('hasRole(''USER'')')}" class="text-center">Ação</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -35,26 +35,30 @@
 					<td><a th:href="@{/oferta/candidatos/{id}(id=${oferta.getId()})}"
 						class="btn btn-info" th:text="'Ver candidatos'"></a></td>
 
+
 					<td class="text-center align-middle">
-						<form th:action="@{/oferta/candidatar}" method="post"
-							class="d-inline-block">
-							<input type="hidden" name="ofertaId" th:value="${oferta.getId()}">
-							<div class="form-group mb-2">
-								<select name="alunoId" class="form-select">
-									<option th:each="aluno : ${alunos}" th:value="${aluno.getId()}"
-										th:text="${aluno.getNome()}"></option>
-								</select>
-							</div>
-							<button type="submit" class="btn btn-primary">Candidatar-se</button>
-						</form>
-						<form th:action="@{/oferta/cancelar}" method="post"
-							class="d-inline-block">
-							<input type="hidden" name="ofertaId" th:value="${oferta.getId()}">
-							<input type="hidden" name="empresaId"
-								th:value="${oferta.getEmpresa().getId()}">
-							<button type="submit" class="btn btn-danger mt-2"
-								onclick="return confirm('Tem certeza que deseja cancelar esta oferta?');">Cancelar</button>
-						</form>
+						<div th:if="${#authorization.expression('hasRole(''ADMIN'')')} ">
+							<a th:href="@{/oferta/{ofertaId}/candidatos(ofertaId=${oferta.id})}" class="btn btn-success">
+								Converter em Estágio
+							</a>
+						</div>
+						<div th:if="${alunoId != null}">
+							<form th:action="@{/oferta/candidatar}" method="post">
+								<input type="hidden" name="alunoId" th:value="${alunoId}" />
+								<input type="hidden" name="ofertaId" th:value="${oferta.getId()}" />
+								<button type="submit">Se Candidatar</button>
+							</form>
+						</div>
+						<div th:if="${#authorization.expression('isAuthenticated()')} and ${#authorization.expression('hasRole(''ADMIN'')')}">
+							<form th:action="@{/oferta/cancelar}" method="post"
+								  class="d-inline-block">
+								<input type="hidden" name="ofertaId" th:value="${oferta.getId()}">
+								<input type="hidden" name="empresaId"
+									   th:value="${oferta.getEmpresa().getId()}">
+								<button type="submit" class="btn btn-danger mt-2"
+										onclick="return confirm('Tem certeza que deseja cancelar esta oferta?');">Cancelar</button>
+							</form>
+						</div>
 					</td>
 				</tr>
 			</tbody>

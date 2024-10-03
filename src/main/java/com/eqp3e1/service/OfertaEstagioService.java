@@ -1,5 +1,6 @@
 package com.eqp3e1.service;
 
+import com.eqp3e1.model.Empresa;
 import com.eqp3e1.model.Estagio;
 import com.eqp3e1.model.OfertaEstagio;
 import com.eqp3e1.model.Aluno;
@@ -7,6 +8,7 @@ import com.eqp3e1.repository.OfertaEstagioRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
@@ -16,6 +18,9 @@ public class OfertaEstagioService {
 
     @Autowired
     private OfertaEstagioRepository ofertaEstagioRepository;
+
+    @Autowired
+    public EstagioService estagioService;
 
     public OfertaEstagio salvar(OfertaEstagio oferta) {
         return ofertaEstagioRepository.save(oferta);
@@ -33,7 +38,7 @@ public class OfertaEstagioService {
         ofertaEstagioRepository.deleteById(id);
     }
 
-    public Estagio converterEmEstagio(Long ofertaId, Aluno aluno) {
+    public Estagio converterEmEstagio(Long ofertaId, Aluno aluno, LocalDate dataInicio, LocalDate dataTermino) {
         Optional<OfertaEstagio> ofertaOpt = ofertaEstagioRepository.findById(ofertaId);
 
         if (ofertaOpt.isPresent()) {
@@ -42,8 +47,8 @@ public class OfertaEstagioService {
             Estagio estagio = new Estagio();
             estagio.setAluno(aluno);
             estagio.setEmpresa(oferta.getEmpresa());
-            estagio.setDataInicio(LocalDate.now());
-            estagio.setDataTermino(LocalDate.now().plusYears(1));
+            estagio.setDataInicio(dataInicio);
+            estagio.setDataTermino(dataTermino);
             estagio.setValorBolsa(oferta.getValorBolsa());
 
             ofertaEstagioRepository.delete(oferta);

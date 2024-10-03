@@ -26,6 +26,10 @@ public class AlunoService {
         return alunoRepository.findById(id);
     }
 
+    public Optional<Aluno> findByUsername(String username) {
+        return alunoRepository.findByUsername(username);
+    }
+
     public List<Aluno> listarTodos() {
         return alunoRepository.findAll();
     }
@@ -37,6 +41,9 @@ public class AlunoService {
         alunoRepository.deleteById(id);
     }
 
+    public List<Aluno> buscarPorIds(List<Long> ids) {
+        return alunoRepository.findAllById(ids);
+    }
     public void candidatar(Long alunoId, Long ofertaId) {
         Optional<Aluno> alunoOpt = alunoRepository.findById(alunoId);
         Optional<OfertaEstagio> ofertaOpt = ofertaEstagioService.buscarPorId(ofertaId);
