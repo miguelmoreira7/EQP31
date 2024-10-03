@@ -37,6 +37,7 @@ public class OfertaEstagioService {
     public void deletar(Long id) {
         ofertaEstagioRepository.deleteById(id);
     }
+    
 
     public Estagio converterEmEstagio(Long ofertaId, Aluno aluno, LocalDate dataInicio, LocalDate dataTermino) {
         Optional<OfertaEstagio> ofertaOpt = ofertaEstagioRepository.findById(ofertaId);

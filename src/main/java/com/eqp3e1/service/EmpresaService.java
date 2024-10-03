@@ -50,6 +50,10 @@ public class EmpresaService {
         empresaRepository.deleteById(id);
     }
 
+    public Optional<Empresa> findByEmail(String email) {
+        return empresaRepository.findByEmail(email);
+    }
+
     public void registrarOferta(Long empresaId, OfertaEstagio oferta) {
         Optional<Empresa> empresaOpt = empresaRepository.findById(empresaId);
 

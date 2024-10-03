@@ -1,45 +1,52 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
+  <head>
+    <meta charset="UTF-8" />
     <title>Empresas</title>
-    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-</head>
-<body>
-<div th:replace="~{partials/_navbar :: navbar}"></div>
-<div class="container mt-4">
-    <h2>Lista de Empresas</h2>
-    <div th:if="${empresas != null}">
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <div th:replace="~{partials/_navbar :: navbar}"></div>
+    <div class="container mt-4">
+      <h2>Lista de Empresas</h2>
+      <div th:if="${empresas != null}">
         <table class="table table-bordered">
-            <thead>
+          <thead>
             <tr>
-                <th>ID</th>
-                <th>Nome</th>
-                <th>CNPJ</th>
-                <th th:if="${#authorization.expression('isAuthenticated()')} and ${#authorization.expression('hasRole(''ADMIN'')')}">Ações</th>
+              <th>ID</th>
+              <th>Nome</th>
+              <th>CNPJ</th>
+              <th
+                th:if="${#authorization.expression('isAuthenticated()')} and ${#authorization.expression('hasRole(''ADMIN'')')}"
+              >
+                Ações
+              </th>
             </tr>
-            </thead>
-            <tbody>
+          </thead>
+          <tbody>
             <tr th:each="empresa : ${empresas}">
-                <td th:text="${empresa.id}">1</td>
-                <td th:text="${empresa.nome}">Nome Empresa</td>
-                <td th:text="${empresa.cnpj}">CNPJ Empresa</td>
-                <td>
-                    <div th:if="${#authorization.expression('isAuthenticated()')} and ${#authorization.expression('hasRole(''ADMIN'')')}">
-                        <a class="btn btn-primary"
-                           th:href="@{/oferta/registrar/{empresaId}(empresaId=${empresa.id})}">
-                            Nova Oferta de Estágio
-                        </a>
-                        <a class="btn btn-warning"
-                           th:href="@{/empresa/editar/{id}(id=${empresa.id})}">
-                            Editar
-                        </a>
-                    </div>
-                </td>
+              <td th:text="${empresa.id}">1</td>
+              <td th:text="${empresa.nome}">Nome Empresa</td>
+              <td th:text="${empresa.cnpj}">CNPJ Empresa</td>
+              <td>
+                <div
+                  th:if="${#authorization.expression('isAuthenticated()')} and ${#authorization.expression('hasRole(''ADMIN'')')}"
+                >
+                  <a
+                    class="btn btn-warning"
+                    th:href="@{/empresa/editar/{id}(id=${empresa.id})}"
+                  >
+                    Editar
+                  </a>
+                </div>
+              </td>
             </tr>
-            </tbody>
+          </tbody>
         </table>
+      </div>
     </div>
-</div>
-</body>
+  </body>
 </html>

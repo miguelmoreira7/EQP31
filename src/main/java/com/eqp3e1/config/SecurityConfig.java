@@ -40,13 +40,20 @@ public class SecurityConfig {
     protected SecurityFilterChain configure(HttpSecurity http) throws Exception {
         http
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers("/", "/empresa/registro", "/empresa/registrar", "aluno/registro", "/aluno/registrar", "/oferta/todas", "/oferta/candidatos/**","/empresa/todas").permitAll()  // Permite acesso público aos recursos estáticos
+                        .requestMatchers("/", "/empresa/registro", "/empresa/registrar", "aluno/registro",
+                                "/aluno/registrar", "/oferta/todas", "/oferta/candidatos/**", "/empresa/todas")
+                        .permitAll() // Permite acesso público aos recursos estáticos
                         .requestMatchers("/oferta/candidatar", "/aluno/minha-ficha").hasRole("USER")
-                        .requestMatchers("/oferta/cadastrarEstagio", "/oferta/cancelar", "/oferta/salvar").hasRole("ADMIN")// Apenas admins podem acessar ofertas
-                        .anyRequest().authenticated())  // Qualquer outra rota requer autenticação
+                        .requestMatchers("/oferta/cadastrarEstagio", "/oferta/cancelar").hasRole("ADMIN")
+                        .requestMatchers("oferta/salvar", "/empresa/editar/**").hasAnyRole("EMPRESA", "ADMIN")// Apenas
+                                                                                                              // admins
+                                                                                                              // podem
+                                                                                                              // acessar
+                                                                                                              // ofertas
+                        .anyRequest().authenticated()) // Qualquer outra rota requer autenticação
                 .formLogin((form) -> form
-                        .loginPage("/auth/login")  // Página de login personalizada
-                        .defaultSuccessUrl("/", true)  // Redireciona para /home após o login bem-sucedido
+                        .loginPage("/auth/login") // Página de login personalizada
+                        .defaultSuccessUrl("/", true) // Redireciona para /home após o login bem-sucedido
                         .permitAll())
                 .logout((logout) -> logout.logoutUrl("/auth/logout")
                         .logoutSuccessUrl("/")
@@ -55,12 +62,13 @@ public class SecurityConfig {
         return http.build();
     }
 
-
     @Bean
     public UserDetailsService userDetailsService() {
         // Criação de usuários básicos, armazenados no banco de dados
-        UserDetails user1 = User.withUsername("user1").password(passwordEncoder().encode("password1")).roles("USER").build();
-        UserDetails admin = User.withUsername("admin").password(passwordEncoder().encode("admin")).roles("ADMIN").build();
+        UserDetails user1 = User.withUsername("user1").password(passwordEncoder().encode("password1")).roles("USER")
+                .build();
+        UserDetails admin = User.withUsername("admin").password(passwordEncoder().encode("admin")).roles("ADMIN")
+                .build();
 
         // Criação e persistência dos usuários no banco de dados
         JdbcUserDetailsManager users = new JdbcUserDetailsManager(dataSource);

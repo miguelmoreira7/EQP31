@@ -37,11 +37,11 @@
 
                     <!-- Se o usuário for uma empresa -->
                     <li class="nav-item" th:if="${#authorization.expression('hasRole(''EMPRESA'')')}">
-                        <a class="nav-link" th:href="@{/oferta/nova}">Criar Nova Oferta</a>
+                        <a class="nav-link" th:href="@{/oferta/registrar}">Criar Nova Oferta</a>
                     </li>
 
                     <li class="nav-item" th:if="${#authorization.expression('hasRole(''EMPRESA'')')}">
-                        <a class="nav-link" th:href="@{/oferta/minhas}">Minhas Ofertas</a>
+                        <a class="nav-link" th:href="@{/oferta/minhas-ofertas}">Minhas Ofertas</a>
                     </li>
 
                     <!-- Listar Alunos -->

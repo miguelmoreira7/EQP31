@@ -44,7 +44,8 @@ public class OfertaEstagioController {
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         if (authentication != null && authentication.isAuthenticated()
-                && !(authentication.getPrincipal() instanceof String && authentication.getPrincipal().equals("anonymousUser"))) {
+                && !(authentication.getPrincipal() instanceof String
+                        && authentication.getPrincipal().equals("anonymousUser"))) {
             String username = authentication.getName();
 
             Optional<Aluno> alunoOpt = alunoService.findByUsername(username);
@@ -57,12 +58,24 @@ public class OfertaEstagioController {
         return "ofertas/ofertas";
     }
 
-    @GetMapping("/registrar/{empresaId}")
-    public String mostrarFormularioDeRegistro(@PathVariable Long empresaId, Model model) {
-        OfertaEstagio ofertaEstagio = new OfertaEstagio();
-        model.addAttribute("ofertaEstagio", ofertaEstagio);
-        model.addAttribute("empresaId", empresaId); // Passando o ID da empresa para o formulário
-        model.addAttribute("habilidadesDisponiveis", habilidadeService.listarTodas());
+    @GetMapping("/registrar")
+    public String mostrarFormularioDeRegistro(Model model) {
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication.getPrincipal() instanceof String
+                        && authentication.getPrincipal().equals("anonymousUser"))) {
+            String username = authentication.getName();
+
+            Optional<Empresa> empresaOpt = empresaService.findByEmail(username);
+            if (empresaOpt.isPresent()) {
+                Empresa empresa = empresaOpt.get();
+                OfertaEstagio ofertaEstagio = new OfertaEstagio();
+
+                model.addAttribute("ofertaEstagio", ofertaEstagio);
+                model.addAttribute("empresaId", empresa.getId()); // Passando o ID da empresa para o formulário
+                model.addAttribute("habilidadesDisponiveis", habilidadeService.listarTodas());
+            }
+        }
         return "ofertas/registrarOfertaEstagio";
     }
 
@@ -81,8 +94,8 @@ public class OfertaEstagioController {
     @PostMapping("/candidatar")
     @PreAuthorize("isAuthenticated()")
     public String candidatarAluno(@RequestParam("alunoId") Long alunoId,
-                                  @RequestParam("ofertaId") Long ofertaId,
-                                  Model model) {
+            @RequestParam("ofertaId") Long ofertaId,
+            Model model) {
         try {
             alunoService.candidatar(alunoId, ofertaId);
         } catch (RuntimeException e) {
@@ -93,7 +106,8 @@ public class OfertaEstagioController {
     }
 
     @PostMapping("/cancelar")
-    public String cancelarOferta(@RequestParam Long ofertaId, @RequestParam Long empresaId, RedirectAttributes redirectAttributes) {
+    public String cancelarOferta(@RequestParam Long ofertaId, @RequestParam Long empresaId,
+            RedirectAttributes redirectAttributes) {
         try {
             empresaService.cancelarOferta(ofertaId, empresaId);
             redirectAttributes.addFlashAttribute("successMessage", "Oferta de estágio cancelada com sucesso.");
@@ -122,8 +136,32 @@ public class OfertaEstagioController {
 
     @GetMapping("/candidatos/{id}")
     public String candidatos(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("oferta", ofertaEstagioService.buscarPorId(id).orElseThrow(() -> new RuntimeException("Oferta de Estágio não encontrada")));
+        model.addAttribute("oferta", ofertaEstagioService.buscarPorId(id)
+                .orElseThrow(() -> new RuntimeException("Oferta de Estágio não encontrada")));
         return "ofertas/candidatos";
+    }
+
+    @GetMapping("/minhas-ofertas")
+    public String minhasOfertas(Model model) {
+
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        if (authentication != null && authentication.isAuthenticated()
+                && !(authentication.getPrincipal() instanceof String
+                        && authentication.getPrincipal().equals("anonymousUser"))) {
+            String username = authentication.getName();
+
+            Optional<Empresa> empresaOpt = empresaService.findByEmail(username);
+            if (empresaOpt.isPresent()) {
+                Empresa empresa = empresaOpt.get();
+                List<OfertaEstagio> candidaturas = empresa.getOfertas();
+                model.addAttribute("empresa", empresa);
+                model.addAttribute("ofertas", candidaturas);
+                return "ofertas/minhasOfertas";
+            } else {
+                throw new RuntimeException("Aluno não encontrado.");
+            }
+        }
+        return "ofertas/minhasOfertas";
     }
 
     @PreAuthorize("hasRole('ADMIN')")
@@ -157,4 +195,5 @@ public class OfertaEstagioController {
 
         return "redirect:/estagio/todos";
     }
+
 }

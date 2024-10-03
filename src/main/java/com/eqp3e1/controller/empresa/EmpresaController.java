@@ -48,7 +48,8 @@ public class EmpresaController {
     }
 
     @PostMapping("/registrar")
-    public String registrarEmpresa(@Valid @ModelAttribute("empresa") Empresa empresa, BindingResult bindingResult, Model model) {
+    public String registrarEmpresa(@Valid @ModelAttribute("empresa") Empresa empresa, BindingResult bindingResult,
+            Model model) {
         if (bindingResult.hasErrors()) {
 
             model.addAttribute("pageTitle", "Registro de Empresa");
@@ -58,12 +59,12 @@ public class EmpresaController {
             return "empresa/registroEmpresa";
         }
         empresaService.salvar(empresa);
-        UserDetails user = User.withUsername(empresa.getEmail()).password(new BCryptPasswordEncoder().encode(empresa.getSenha())).roles("EMPRESA").build();
+        UserDetails user = User.withUsername(empresa.getEmail())
+                .password(new BCryptPasswordEncoder().encode(empresa.getSenha())).roles("EMPRESA").build();
         userService.save(user);
         return "redirect:/empresa/todas";
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @GetMapping("/editar/{id}")
     public String mostrarFormularioEdicao(@PathVariable("id") Long id, Model model) {
         Optional<Empresa> empresaOpt = empresaService.buscarPorId(id);
@@ -84,11 +85,10 @@ public class EmpresaController {
         }
     }
 
-    @PreAuthorize("hasRole('ADMIN')")
     @PostMapping("/atualizar")
     public String atualizarEmpresa(@Validated(OnUpdate.class) @ModelAttribute("empresa") Empresa empresa,
-                                   BindingResult bindingResult,
-                                   Model model) {
+            BindingResult bindingResult,
+            Model model) {
         if (bindingResult.hasErrors()) {
             // Log validation errors
             bindingResult.getAllErrors().forEach(error -> {
@@ -103,7 +103,6 @@ public class EmpresaController {
         empresaService.salvar(empresa);
         return "redirect:/empresa/todas";
     }
-
 
     @GetMapping("/todas")
     public String listarEmpresas(Model model) {
@@ -128,7 +127,8 @@ public class EmpresaController {
 
     @GetMapping("/ficha/{id}")
     public String fichaEmpresa(@PathVariable("id") Long id, Model model) {
-        model.addAttribute("empresa", empresaService.buscarPorId(id).orElseThrow(() -> new RuntimeException("Empresa não encontrada")));
+        model.addAttribute("empresa",
+                empresaService.buscarPorId(id).orElseThrow(() -> new RuntimeException("Empresa não encontrada")));
         return "empresa/ficha";
     }
 }
