@@ -5,9 +5,13 @@ import com.eqp3e1.model.OfertaEstagio;
 import com.eqp3e1.model.groups.OnUpdate;
 import com.eqp3e1.service.EmpresaService;
 import com.eqp3e1.service.HabilidadeService;
+import com.eqp3e1.service.UserService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
@@ -26,6 +30,9 @@ public class EmpresaController {
 
     @Autowired
     private HabilidadeService habilidadeService;
+
+    @Autowired
+    private UserService userService;
 
     @GetMapping("/registro")
     public String mostrarFormularioRegistro(Model model) {
@@ -51,6 +58,8 @@ public class EmpresaController {
             return "empresa/registroEmpresa";
         }
         empresaService.salvar(empresa);
+        UserDetails user = User.withUsername(empresa.getEmail()).password(new BCryptPasswordEncoder().encode(empresa.getSenha())).roles("EMPRESA").build();
+        userService.save(user);
         return "redirect:/empresa/todas";
     }
 

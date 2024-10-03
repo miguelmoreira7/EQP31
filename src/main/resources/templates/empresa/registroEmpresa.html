@@ -37,8 +37,8 @@
         </div>
 
         <div class="mb-3" th:if="${empresa.id == null}">
-            <label for="senha">Senha:</label>
-            <input type="password" id="senha" th:field="*{senha}" required />
+            <label for="senha" class="form-label">Senha:</label>
+            <input type="password" id="senha" class="form-control" th:field="*{senha}" required />
             <p th:if="${#fields.hasErrors('senha')}" th:errors="*{senha}">Senha Error</p>
         </div>
 
